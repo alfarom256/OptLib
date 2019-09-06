@@ -8,6 +8,7 @@
 #include <tchar.h>
 #include "includes.h"
 
+
 struct MemInfoModule {
 	HMODULE hMod;
 	std::string modName;
@@ -25,7 +26,4 @@ namespace MemInfo
 	bool RemoveLoadedModule(HMODULE hMod);
 	//std::vector<HMODULE> curModules;
 };
-
-
-
 #endif

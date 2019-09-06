@@ -130,31 +130,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\SimpleElevate\proc.h" />
     <ClInclude Include="aes.h" />
     <ClInclude Include="aes.hpp" />
     <ClInclude Include="antisandbox.h" />
     <ClInclude Include="Crypto.h" />
     <ClInclude Include="EncryptedShellcode.h" />
     <ClInclude Include="Cylance.h" />
+    <ClInclude Include="Jinja2CppLight.h" />
     <ClInclude Include="ProcHelpers.h" />
+    <ClInclude Include="stringhelper.h" />
     <ClInclude Include="TestCalcShellcode.h" />
     <ClInclude Include="includes.h" />
     <ClInclude Include="MemInfo.h" />
     <ClInclude Include="Privileges.h" />
+    <ClInclude Include="TestHTAGen.h" />
+    <ClInclude Include="TestJavascript.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="aes.c" />
     <ClCompile Include="antisandbox.cpp" />
     <ClCompile Include="Crypto.cpp" />
     <ClCompile Include="Cylance.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Jinja2CppLight.cpp" />
+    <ClCompile Include="main_hta_test.cpp" />
     <ClCompile Include="MemInfo.cpp" />
     <ClCompile Include="Privileges.cpp" />
     <ClCompile Include="ProcHelpers.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Libraries.txt" />
+    <ClCompile Include="stringhelper.cpp" />
+    <ClCompile Include="TestHTAGen.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

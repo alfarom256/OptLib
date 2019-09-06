@@ -24,6 +24,7 @@ struct ProcExecute {
 namespace ProcHelper
 {
 	HANDLE SpawnThreadShellcode(unsigned char* buf, int bufLen, PH_THREAD_INFO *pt);
+	HANDLE SpawnProcessShellcode(unsigned char* buf, int bufLen, PH_THREAD_INFO *pt);
 	HANDLE CreateFiberShellcode(unsigned char* buf, int bufLen, PH_THREAD_INFO *pt);
 	HANDLE RunFiberShellcode(HANDLE hFiber, PH_THREAD_INFO *pt);
 	HANDLE CreateFiberStartRoutine(LPFIBER_START_ROUTINE lpt, PH_THREAD_INFO* pt);

@@ -1,8 +1,8 @@
 #include "Privileges.h"
 #include "EncryptedShellcode.h"
 #include "ProcHelpers.h"
-#include "MemInfo.h"
 #include "Cylance.h"
+#include "MemInfo.h"
 #include "antisandbox.h"
 #include "Crypto.h"
 #include <iostream>

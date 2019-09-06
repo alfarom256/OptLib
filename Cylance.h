@@ -1,5 +1,6 @@
 #pragma once
 #include "MemInfo.h"
+
 bool hasEnding(std::string const& fullString, std::string const& ending);
 
 namespace Cylance {

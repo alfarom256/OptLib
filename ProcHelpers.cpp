@@ -47,6 +47,12 @@ HANDLE ProcHelper::SpawnThreadShellcode(unsigned char* buf, int buf_len, PH_THRE
 		PCOND(hThread == NULL)
 		return hThread;
 	}
+	return hThread;
+}
+
+HANDLE ProcHelper::SpawnProcessShellcode(unsigned char* buf, int bufLen, PH_THREAD_INFO* pt)
+{
+	return HANDLE();
 }
 
 HANDLE ProcHelper::CreateFiberShellcode(unsigned char* buf, int bufLen, PH_THREAD_INFO *pt)
