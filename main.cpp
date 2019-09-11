@@ -29,7 +29,7 @@ int main() {
 
 	//Cylance::FreeLibraryCylance();
 
-	//ProcHelper::ImportListPopulate(baseAddr);
+	ProcHelper::ImportListPopulate(baseAddr);
 
 	//ProcHelper::SpawnThreadShellcode((unsigned char*)buf, sizeOfShellcode, pt);
 

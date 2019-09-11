@@ -1,5 +1,7 @@
 #pragma once
 #include "includes.h"
+#include <DbgHelp.h>
+#pragma comment( lib, "dbghelp.lib" )
 #include <map>
 struct PH_THREAD_INFO
 {
@@ -20,6 +22,17 @@ struct ProcExecute {
 	HANDLE fiber_handle;
 };
 
+
+struct ImageSectionInfo
+{
+	char SectionName[IMAGE_SIZEOF_SHORT_NAME];//the macro is defined WinNT.h
+	char* SectionAddress;
+	int SectionSize;
+	ImageSectionInfo(const char* name)
+	{
+		strcpy_s(SectionName, name);
+	}
+};
 
 namespace ProcHelper
 {

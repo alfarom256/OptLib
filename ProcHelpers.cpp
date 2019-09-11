@@ -117,10 +117,40 @@ DWORD ProcHelper::Win32SetRvaToDwordOffset(IMAGE_NT_HEADERS32* m_pNtHeader, DWOR
 }
 
 std::map<std::string, LPVOID> ProcHelper::ImportListPopulate(LPVOID imageBase)
-{
+{	
 	std::map<std::string, LPVOID> retval;
 	HANDLE hProc = GetCurrentProcess();
 	HANDLE hModule = (PIMAGE_DOS_HEADER)GetModuleHandle(NULL); // get the dos header for the current process
+
+	// https://stackoverflow.com/questions/4308996/finding-the-address-range-of-the-data-segment
+
+	char* dllImageBase = (char*)hModule; //suppose hModule is the handle to the loaded Module (.exe or .dll)
+
+	//get the address of NT Header
+	IMAGE_NT_HEADERS* pNtHdr = ImageNtHeader(hModule);
+
+	//after Nt headers comes the table of section, so get the addess of section table
+	IMAGE_SECTION_HEADER* pSectionHdr = (IMAGE_SECTION_HEADER*)(pNtHdr + 1);
+
+	ImageSectionInfo * pSectionInfo = NULL;
+
+	//iterate through the list of all sections, and check the section name in the if conditon. etc
+	for (int i = 0; i < pNtHdr->FileHeader.NumberOfSections; i++)
+	{
+		char* name = (char*)pSectionHdr->Name;
+		if (memcmp(name, ".data", 5) == 0)
+		{
+			pSectionInfo = new ImageSectionInfo(".data");
+			pSectionInfo->SectionAddress = dllImageBase + pSectionHdr->VirtualAddress;
+
+			//range of the data segment - something you're looking for
+				pSectionInfo->SectionSize = pSectionHdr->Misc.VirtualSize;
+			break;
+		}
+		pSectionHdr++;
+	}
+
+
 
 	BOOL m_isIATFound = FALSE;
 	PIMAGE_NT_HEADERS ntHeader;
@@ -165,16 +195,39 @@ std::map<std::string, LPVOID> ProcHelper::ImportListPopulate(LPVOID imageBase)
 			if (pOriginalFirstThunk->u1.Function < 0xffffffff) {
 				LPVOID realAddrPtr = (LPVOID)FirstImportDescriptor->FirstThunk;
 				realAddrPtr = (LPVOID)((ULONG64)realAddrPtr + (ULONG64)imageBase);
-				ULONG64 realAddr;
+				ULONG64 jumpPointer;
 				//memcpy(&realAddr, realAddrPtr, sizeof(ULONG64));
-				realAddr = pFirstThunk->u1.AddressOfData;
+				jumpPointer = pFirstThunk->u1.AddressOfData;
 				; // Skip over the JMP instruction;
 				DWORD offset;
-				memcpy(&offset, (LPVOID)(realAddr+3), sizeof(DWORD));
+				memcpy(&offset, (LPVOID)(jumpPointer+3), sizeof(DWORD));
 				//realAddr += offset;
 				//real Addr now contains a pointer to the beginning of the real function
 				
-				retval.insert(std::pair<std::string, LPVOID>(importName, (LPVOID)realAddr));
+				retval.insert(std::pair<std::string, LPVOID>(importName, (LPVOID)jumpPointer));
+				// find .data address
+				// load the jump instruction
+				unsigned char* jump_ins = (unsigned char*)jumpPointer;
+				if (!jump_ins[0] == 0xFF) {
+#ifdef DEBUG
+					std::cout << "not a jump instruction " << jump_ins[0] << std::endl;
+#endif // DEBUG
+					break;
+				}
+				jump_ins++;
+				if (!jump_ins[0] == 0x25) {
+#ifdef DEBUG
+					// it's not jmp QWORD PTR ds:[x]
+					std::cout << "not a ds offset " << jump_ins[0] << std::endl;
+#endif // DEBUG
+					break;
+				}
+				jump_ins++;
+				DWORD data_offset;
+				memcpy(&data_offset, jump_ins, 4);
+
+				// add the offset to DS to the .data location
+				LPVOID realAddr = pSectionInfo->SectionAddress + data_offset;
 #ifdef DEBUG
 				printf("RealAddr: %p\n", realAddr);
 				std::cout << "IMPORT NAME: " << importName << std::endl;
