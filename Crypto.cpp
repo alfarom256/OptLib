@@ -75,7 +75,7 @@ bool OptCrypto::GetSHA256Hash(char* buffer,             //input buffer
 		bResult = TRUE;
 	}
 	for (int i = 0; i < *dwFinalHashSize; i++) {
-		printf("%x", byteFinalHash[i]);
+		printf("%02x", (unsigned char)byteFinalHash[i]);
 	}
 	printf("\n");
 EndHash:

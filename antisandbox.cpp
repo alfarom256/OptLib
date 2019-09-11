@@ -38,7 +38,8 @@ bool AntiSandbox::isDomainJoined(SandboxInformation *si)
 		break;
 	}
 	// clean up
+	bool res = lstrlenW(lpNameBuffer);
 	NetApiBufferFree(lpNameBuffer);
-	return true;
+	return res;
 
 }
