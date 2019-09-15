@@ -52,7 +52,7 @@ LPSTR OptPrivs::getCurrentSID()
 	SID_NAME_USE snu;
 	
 	LPWSTR StringSid;
-	if (!ConvertSidToStringSid(po->Owner, (LPSTR*)&StringSid)) {
+	if (!ConvertSidToStringSid(po->Owner, &StringSid)) {
 		this->SID = (LPSTR)"0";
 	}
 	else {

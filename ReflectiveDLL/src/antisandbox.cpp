@@ -43,4 +43,3 @@ bool AntiSandbox::isDomainJoined(SandboxInformation *si)
 	return res;
 
 }
-
